@@ -14,15 +14,18 @@ const authorFilter = ref('')
 const appConfig = useRuntimeConfig()
 
 const store = useBookStore()
-const { books : bookStore } = storeToRefs(store)
+const { books: bookStore } = storeToRefs(store)
 const { setBook } = store;
 
-const { data } = await useFetch(`${appConfig.public.apiBase}/books`)
+const { data } = await useAsyncData('count', () => $fetch(`${appConfig.public.apiBase}/books`))
 
-onMounted(() => {
-  books.value = data.value;
-  setBook(data.value)
-});
+  if (bookStore.value.length === 0) {
+    setBook(data.value)
+    books.value = data.value;
+  } else {
+    books.value = bookStore.value
+  }
+
 
 function handleFilters(e) {
   const { name, value } = e.target;
