@@ -1,5 +1,5 @@
-import { PiniaPlugin, defineStore } from 'pinia'
-import persist, { PersistOptions } from 'pinia-plugin-persist'
+import { defineStore } from 'pinia'
+import { PersistOptions } from 'pinia-plugin-persist'
 
 export interface IBook {
   id: number;

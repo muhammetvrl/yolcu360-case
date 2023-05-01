@@ -6,15 +6,22 @@
 </template>
 
 <script setup>
+import { storeToRefs } from 'pinia'
+import { useBookStore } from '~/store/books'
 const books = ref([])
 const titleFilter = ref('')
 const authorFilter = ref('')
 const appConfig = useRuntimeConfig()
 
+const store = useBookStore()
+const { books : bookStore } = storeToRefs(store)
+const { setBook } = store;
+
 const { data } = await useFetch(`${appConfig.public.apiBase}/books`)
 
 onMounted(() => {
   books.value = data.value;
+  setBook(data.value)
 });
 
 function handleFilters(e) {
@@ -25,8 +32,8 @@ function handleFilters(e) {
   } else {
     authorFilter.value = value
   }
-  
-  books.value = data.value.filter(book => book.title.includes(titleFilter.value) && book.author.includes(authorFilter.value))
+
+  books.value = bookStore.value.filter(book => book.title.includes(titleFilter.value) && book.author.includes(authorFilter.value))
 }
 
 </script>
